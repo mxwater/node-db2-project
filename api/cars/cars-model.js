@@ -9,10 +9,11 @@ const getById = (id) => {
   return db('cars').where({ id }).first(); 
 };
 
-
-const create = (car) => {
-  return db('cars').insert(car).then(([id]) => getById(id));
+const create = async (car) => {
+  const [id] = await db('cars').insert(car); 
+  return getById(id);
 };
+
 
 const update = (id, changes) => {
   return db('cars').where({ id }).update(changes).then(() => getById(id));

@@ -16,23 +16,29 @@ router.get('/:id', checkCarId, (req, res) => {
   res.json(req.car);
 });
 
-router.post('/', checkCarPayload, checkVinNumberValid, checkVinNumberUnique, async (req, res) => {
-  try {
-    const newCar = await Cars.create(req.body);
-    res.status(201).json(newCar);
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to create new car' });
-  }
-});
+router.post(
+    '/', 
+    checkCarPayload,       
+    checkVinNumberValid,    
+    async (req, res) => {
+      try {
+        const newCar = await Cars.create(req.body); 
+        res.status(201).json(newCar);  
+      } catch (err) {
+        res.status(500).json({ message: 'Failed to create car' });
+      }
+    }
+  );
 
 router.put('/:id', checkCarId, checkCarPayload, checkVinNumberValid, async (req, res) => {
-  try {
-    const updatedCar = await Cars.update(req.params.id, req.body);
-    res.json(updatedCar);
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to update car' });
-  }
-});
+    try {
+      const updatedCar = await Cars.update(req.params.id, req.body);
+      res.status(200).json(updatedCar); 
+    } catch (err) {
+      res.status(500).json({ message: 'Failed to update car' });
+    }
+  });
+  
 
 router.delete('/:id', checkCarId, async (req, res) => {
   try {

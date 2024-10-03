@@ -19,29 +19,27 @@ const checkCarPayload = (req, res, next) => {
   next();
 };
 
-const checkVinNumberValid = (req, res, next) => {
-  const { vin } = req.body;
-
-  if (!vin || vin.length !== 17 || !/^[A-Za-z0-9]+$/.test(vin)) {
+function checkVinNumberValid(req, res, next) {
+  const vin = req.body.vin;
+  
+  if (!vin || vin.length !== 17) {  
     return res.status(400).json({ message: `vin ${vin} is invalid` });
   }
 
-  next();
-};
+  next();  
+}
 
-const checkVinNumberUnique = async (req, res, next) => {
-  const { vin } = req.body;
-
+async function checkVinNumberUnique(req, res, next) {
   try {
-    const existingCar = await Cars.getByVin(vin);
-    if (existingCar) {
-      return res.status(400).json({ message: `vin ${vin} already exists` });
+    const car = await Cars.getByVin(req.body.vin); 
+    if (car) {
+      return res.status(400).json({ message: `vin ${req.body.vin} already exists` });
     }
     next();
-  } catch (err) {
-    res.status(500).json({ message: 'Error checking VIN uniqueness' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Failed to check VIN uniqueness' });
   }
-};
+}
 
 const checkCarId = async (req, res, next) => {
   try {

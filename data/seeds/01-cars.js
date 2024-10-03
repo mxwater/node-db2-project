@@ -1,5 +1,5 @@
 exports.seed = function(knex) {
-    return knex('cars').truncate() // Clear the table first
+    return knex('cars').truncate() 
       .then(function() {
         return knex('cars').insert([
           { vin: '1HGCM82633A123456', make: 'Honda', model: 'Accord', mileage: 150000, title: 'clean', transmission: 'automatic' },
