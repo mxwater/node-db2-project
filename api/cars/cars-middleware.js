@@ -29,17 +29,19 @@ function checkVinNumberValid(req, res, next) {
   next();  
 }
 
-async function checkVinNumberUnique(req, res, next) {
+const checkVinNumberUnique = async (req, res, next) => {
+  const { vin } = req.body;
+
   try {
-    const car = await Cars.getByVin(req.body.vin); 
-    if (car) {
-      return res.status(400).json({ message: `vin ${req.body.vin} already exists` });
+    const existingCar = await Cars.getByVin(vin);
+    if (existingCar) {
+      return res.status(400).json({ message: `vin ${vin} already exists` });
     }
     next();
-  } catch (error) {
-    return res.status(500).json({ message: 'Failed to check VIN uniqueness' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error checking VIN uniqueness' });
   }
-}
+};
 
 const checkCarId = async (req, res, next) => {
   try {
